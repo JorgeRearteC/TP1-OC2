@@ -2,13 +2,15 @@
 extern printf
 
 section .data
-    format db "numero: %d", 13,10,0  ;d: numero f: float s: string
-    msg db 'Hello, world!', 0
     
     ; CAMBIAR A DQ PARA PUNTO FLOTANTE
-    vA db 1
-    vB db 2
-    vC db 3
+    numa dw 4
+    numB dw 2
+    numC dw 3
+    
+    ; MENSAJES
+    msjResultado db "Resultado Final: %d", 13,10,0  ;d: numero f: float s: string
+    msjFin db "No es posible calcular"
 
 section .text
     global CMAIN
@@ -16,18 +18,33 @@ section .text
 CMAIN:
     mov ebp, esp; for correct debugging
  
-    mov eax, vA
-    mov ebx, vB
-    mov ecx, vC
+    mov eax, -4
+    mov ebx, 0
+    mov ecx, 2
     
     mov edx, 0
     
     add edx, eax
-         
-    ;PRINT CON LA PILA
-    push edx
-    push format
+    
+    cmp eax, ebx
+    jle MENSAJE_FIN
+    cmp eax, ebx
+    jge MENSAJE_RESULTADO
+    
+    
+    ret
+
+
+
+MENSAJE_FIN:
+    push msjFin
     call printf
     add esp, 8
-    
+    ret
+
+MENSAJE_RESULTADO:
+    push edx
+    push msjResultado
+    call printf
+    add esp, 8
     ret
