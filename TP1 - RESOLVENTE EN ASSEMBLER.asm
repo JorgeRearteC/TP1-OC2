@@ -4,7 +4,7 @@ section .data
     
     ; CAMBIAR A DQ PARA PUNTO FLOTANTE
     numA dq 4.0
-    numB dq 1.0
+    numB dq 10.0
     numC dq 3.0
     
     cos1 dq -4.0
@@ -42,18 +42,20 @@ CMAIN:
     jb SIN_RESULTADO
     
     
-    
-            
     fsqrt ; √(B*B-4*A*C)
     fld qword [numB] ; B , √(B*B-4*A*C)
     fmul qword [cos2] ; -B , √(B*B-4*A*C)
-    fld qword [cos2] ; -1 , -B , √(B*B-4*A*C)
-    fmul st0,st2 ; -√(B*B-4*A*C), -B , √(B*B-4*A*C)     
-    faddp ;  -B-√(B*B-4*A*C) , √(B*B-4*A*C)
-    fld qword [numA] ;  A , -B-√(B*B-4*A*C) , √(B*B-4*A*C)
-    fmul qword [cos3] ; 2*A , -B-√(B*B-4*A*C) , √(B*B-4*A*C)
-    fdivp st1,st0  ;  (-B-√(B*B-4*A*C))/2*A , √(B*B-4*A*C)
+    fld qword [numA] ;  A , -B , √(B*B-4*A*C)
+    fmul qword [cos3] ; 2*A , -B , √(B*B-4*A*C)
+    fld qword [cos2] ; -1 , 2*A , -B , √(B*B-4*A*C)
+    fmul st0,st3 ; -√(B*B-4*A*C), 2*A , -B , √(B*B-4*A*C)     
+    fld qword [st1] ; -B , -√(B*B-4*A*C) , 2*A , -B , √(B*B-4*A*C)
+    faddp ;  -B-√(B*B-4*A*C) , 2*A , -B , √(B*B-4*A*C)
+    fld qword [st1] ;  2*A , -B-√(B*B-4*A*C) , 2*A , -B , √(B*B-4*A*C)
+    fdivp st1,st0  ;  (-B-√(B*B-4*A*C))/2*A , 2*A , -B , √(B*B-4*A*C)
     fstp qword [resX2] ; GUARDO ST0 EN RESX2
+    
+    
 
         
     
