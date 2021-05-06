@@ -10,15 +10,11 @@ section .data
     cos1 dq -4.0
     cos2 dq -1.0
     cos3 dq 2.0
-    
-    resX1 dq 0  
-      
-    ; MENSAJES
-    msjResultado db 13,10,"Resultado Final" ;d: numero f: float s: string
-    
+    cos4 dq 1.0
+        
     
 section .bss
-    ;resX1 resq 1    ;the result ‒ length of side c
+    resX1 resq 1    ;the result ‒ length of side c
     resX2 resq 1
     
 section .text
@@ -49,13 +45,28 @@ CMAIN:
     fmul qword [cos3] ; 2*A , -B , √(B*B-4*A*C)
     fld qword [cos2] ; -1 , 2*A , -B , √(B*B-4*A*C)
     fmul st0,st3 ; -√(B*B-4*A*C), 2*A , -B , √(B*B-4*A*C)     
-    fld qword [st1] ; -B , -√(B*B-4*A*C) , 2*A , -B , √(B*B-4*A*C)
+    fld qword [cos4] ; 1 , -√(B*B-4*A*C) , 2*A , -B , √(B*B-4*A*C)
+    fmul st0,st3 ; -B , -√(B*B-4*A*C) , 2*A , -B , √(B*B-4*A*C)
     faddp ;  -B-√(B*B-4*A*C) , 2*A , -B , √(B*B-4*A*C)
-    fld qword [st1] ;  2*A , -B-√(B*B-4*A*C) , 2*A , -B , √(B*B-4*A*C)
+    fld qword [cos4] ;  1 , -B-√(B*B-4*A*C) , 2*A , -B , √(B*B-4*A*C)
+    fmul st0,st2 ;  2*A , -B-√(B*B-4*A*C) , 2*A , -B , √(B*B-4*A*C)
     fdivp st1,st0  ;  (-B-√(B*B-4*A*C))/2*A , 2*A , -B , √(B*B-4*A*C)
-    fstp qword [resX2] ; GUARDO ST0 EN RESX2
+    fstp qword [resX1] ; GUARDO ST0 EN RESX2
     
+    ; 2*A , -B , √(B*B-4*A*C)
     
+    fld qword [cos4] ; 1 , 2*A , -B , √(B*B-4*A*C)
+    fmul st0,st3
+    
+    fld qword [cos4] ; 1 , 1 , 2*A , -B , √(B*B-4*A*C)
+    fmul st0,st3
+    faddp 
+    
+    fld qword [cos4]
+    fmul st0,st2
+    
+    fdivp st1,st0
+    fstp qword [resX2]
 
         
     
