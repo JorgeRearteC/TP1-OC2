@@ -1,21 +1,30 @@
 %include "io.inc"
 
+
+
+%define numA qword [ebp+8]
+%define numB qword [ebp+16]
+%define numC qword [ebp+24]
+%define resX1 dword [ebp+32]
+%define resX2 dword [ebp+40]
+
 section .data
     
     ; CAMBIAR A DQ PARA PUNTO FLOTANTE
-    numA dq 4.0
-    numB dq 10.0
-    numC dq 3.0
+ ;   numA dq 4.0
+ ;   numB dq 10.0
+ ;   numC dq 3.0
     
     cos1 dq -4.0
     cos2 dq -1.0
     cos3 dq 2.0
     cos4 dq 1.0
         
+    ;sinDef dq 'Sin Def'
     
-section .bss
-    resX1 resq 1    ;the result ‒ length of side c
-    resX2 resq 1
+;section .bss
+    ;resX1 resq 1    ;the result ‒ length of side c
+    ;resX2 resq 1
     
 section .text
     global CMAIN
@@ -52,7 +61,7 @@ CMAIN:
     fmul st0,st2 ;  2*A , -B-√(B*B-4*A*C) , 2*A , -B , √(B*B-4*A*C)
     fdivp st1,st0  ;  (-B-√(B*B-4*A*C))/2*A , 2*A , -B , √(B*B-4*A*C)
     fstp qword [resX1] ; GUARDO ST0 EN RESX2
-    
+        
     ; 2*A , -B , √(B*B-4*A*C)
     
     fld qword [cos4] ; 1 , 2*A , -B , √(B*B-4*A*C)
@@ -73,11 +82,8 @@ CMAIN:
     
     ret
     
-SIN_RESULTADO:;DEJO A LAS VARIABLES COMO 0
-    jmp FIN
-    ret
-
-FIN:;FIN EJECUCION
+SIN_RESULTADO:
+    
     ret
 
     
