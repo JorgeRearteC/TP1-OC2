@@ -31,87 +31,43 @@ CMAIN:
     
     fld qword [cos1] ; Se almacena en ST0 
     
-    fmul qword [numA]
-    fmul qword [numC]
+    fmul qword [numA] ; -4 * A
+    fmul qword [numC] ; -4*A * C
     
-    fld qword [numB]
-    fmul st0,st0
+    fld qword [numB] ; B , -4*A*C
+    fmul st0,st0 ; B*B , -4*A*C
     
-    faddp
+    faddp ; Suma todos los registros (B*B-4*A*C)
     
-    fsqrt 
+    fsqrt ; √(B*B-4*A*C)
     
-    fld qword [numB]
-    fmul qword [cos2]
+    fld qword [numB] ; B , √(B*B-4*A*C)
+    fmul qword [cos2] ; -B , √(B*B-4*A*C)
     
-    fld qword [cos2]
-    fmul st0,st2
-;    fmul qword [cos3]    
+    fld qword [cos2] ; -1 , -B , √(B*B-4*A*C)
+    fmul st0,st2 ; -√(B*B-4*A*C), -B , √(B*B-4*A*C)  
        
-    faddp 
+    faddp ;  -B-√(B*B-4*A*C) , √(B*B-4*A*C)
     
-    fld qword [numA]
-    fmul qword [cos3]
+    fld qword [numA] ;  A , -B-√(B*B-4*A*C) , √(B*B-4*A*C)
+    fmul qword [cos3] ; 2*A , -B-√(B*B-4*A*C) , √(B*B-4*A*C)
     
-    fdivp st1,st0
+    fdivp st1,st0  ;  (-B-√(B*B-4*A*C))/2*A , √(B*B-4*A*C)
     
-    fstp qword [resX1]
+    fstp qword [resX2] ; GUARDO ST0 EN RESX2
 
-    ;CALCULO X2
-    
-    fld qword [cos1] ; Se almacena en ST0 
-    
-    fmul qword [numA]
-    fmul qword [numC]
-    
-    fld qword [numB]
-    fmul st0,st0
-    
-    faddp
-    
-    fsqrt 
-    
-    fld qword [numB]
-    fmul qword [cos2]
+    ; VALIDAR SI TIENE RESULTADO
         
-    faddp 
     
-    fld qword [numA]
-    fmul qword [cos3]
-    
-    fdivp st1,st0
-    
-    fstp qword [resX2]
-            
-    ;fstp qword [delta]
-    
-    ;mov edx, delta
-    
-;    fstp qword edx
-    
-;    mov edx, [resX1]
-    ;fsqrt 
-    
-    ;fmul
-    ;fdiv
-    
-    ;mov edx, 5
-    
-    
-    
-;    add resX1, eax
-    
-    ;cmp eax, ebx
-    ;jge MENSAJE_RESULTADO
-    
-    ;call MENSAJE_RESULTADO
-    
-    
-;    mov AH, 09H
-;    mov DX, [msjResultado]
-;    int 21H
     
     ret
+    
+SIN_RESULTADO:
+
+FIN:
+
+
+    
     
     
     
