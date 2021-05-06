@@ -77,9 +77,6 @@ CMAIN:
     fdivp st1,st0
     fstp qword [resX2]
 
-        
-    
-    
     ret
     
 SIN_RESULTADO:
